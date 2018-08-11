@@ -6,7 +6,7 @@ using Microsoft.WindowsAzure.Storage.Table;
 using System.Text;
 using Newtonsoft.Json;
 
-public static HttpResponseMessage Run(HttpRequestMessage req, IQueryable<Salaries> inTable, TraceWriter log)
+public static HttpResponseMessage Run(HttpRequestMessage req, IQueryable<SalaryEntity> inTable, TraceWriter log)
 {
     string teamId = req.GetQueryNameValuePairs()
                  .FirstOrDefault(q => string.Compare(q.Key, "teamId", true) == 0)
@@ -18,6 +18,7 @@ public static HttpResponseMessage Run(HttpRequestMessage req, IQueryable<Salarie
 
     int yearIdInt = Convert.ToInt32(yearId);
 
+    // The ID for Milwaukee changes in 1997 for some reason.  *shrug*
     if (teamId == "MIL" && yearIdInt <= 1997)
     {
         teamId = "ML4";
@@ -33,7 +34,7 @@ public static HttpResponseMessage Run(HttpRequestMessage req, IQueryable<Salarie
 
 }
 
-public class Salary : TableEntity
+public class SalaryEntity : TableEntity
 {
     public string LeagueId { get; set; }
     public int YearId { get; set; }
